@@ -22,7 +22,7 @@ if (empty($request_uri)) {
 echo "Request URI: " . $request_uri . "<br>"; // Debugging line
 
 // Map requested URI to actual file path in src/app
-$file_path = __DIR__ . '/../src/app/' . $request_uri;
+$file_path = __DIR__ . '/src/app/' . $request_uri;
 
 echo "File Path: " . $file_path . "<br>"; // Debugging line
 
