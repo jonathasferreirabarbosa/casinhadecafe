@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $item_stmt->execute([$proposal_id, $product_id, $quantity, $unit_price, $total_price]);
                     }
 
-                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"view_proposal.php?token={$unique_url_token}\" target="_blank" class="text-blue-600 hover:underline">view_proposal.php?token={$unique_url_token}</a>";
+                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"view_proposal.php?token={$unique_url_token}\" target=\"_blank\" class=\"text-blue-600 hover:underline\">view_proposal.php?token={$unique_url_token}</a>";
                 } else {
                     $message = "Erro ao adicionar proposta.";
                 }
@@ -192,7 +192,10 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($proposals as $proposal): ?>
+                        <?php foreach ($proposals as $proposal):
+                            // Ensure proposal is an array and has the expected keys before accessing them
+                            if (is_array($proposal) && isset($proposal['id']) && isset($proposal['client_name']) && isset($proposal['proposal_date']) && isset($proposal['status']) && isset($proposal['unique_url_token'])) { 
+                        ?>
                             <tr>
                                 <td class="py-2 px-4 border-b text-center"><?= $proposal['id'] ?></td>
                                 <td class="py-2 px-4 border-b"><?= $proposal['client_name'] ?></td>
@@ -207,7 +210,7 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
                                     <a href="generate_pdf.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs">Gerar PDF</a>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php } endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -215,32 +218,75 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
     </div>
 
     <script>
-        const products = <?= json_encode($products) ?>;
+        const products = <?php echo json_encode($products); ?>;
         let productItemCount = 1;
 
         document.getElementById('add_product_item').addEventListener('click', function() {
             const container = document.getElementById('product_items_container');
+            
             const newItem = document.createElement('div');
             newItem.classList.add('product-item', 'mb-4', 'p-4', 'border', 'rounded');
 
-            let productOptions = '';
+            // Product Label
+            const productLabel = document.createElement('label');
+            productLabel.htmlFor = `product_id_${productItemCount}`;
+            productLabel.classList.add('block', 'text-gray-700', 'text-sm', 'font-bold', 'mb-2');
+            productLabel.innerText = 'Produto:';
+
+            // Product Select
+            const productSelect = document.createElement('select');
+            productSelect.name = 'product_id[]';
+            productSelect.id = `product_id_${productItemCount}`;
+            productSelect.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
+            productSelect.required = true;
+
             products.forEach(product => {
-                productOptions += `<option value="${product.id}" data-price="${product.price}">${product.name} (R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')})</option>`;
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.dataset.price = product.price;
+                option.innerText = `${product.name} (R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')})`;
+                productSelect.appendChild(option);
             });
 
-            newItem.innerHTML = `
-                <div class="mb-2">
-                    <label for="product_id_${productItemCount}" class="block text-gray-700 text-sm font-bold mb-2">Produto:</label>
-                    <select name="product_id[]" id="product_id_${productItemCount}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        ${productOptions}
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <label for="quantity_${productItemCount}" class="block text-gray-700 text-sm font-bold mb-2">Quantidade:</label>
-                    <input type="number" name="quantity[]" id="quantity_${productItemCount}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="1" value="1" required>
-                </div>
-                <button type="button" onclick="this.closest('.product-item').remove()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">Remover</button>
-            `;
+            // Quantity Label
+            const quantityLabel = document.createElement('label');
+            quantityLabel.htmlFor = `quantity_${productItemCount}`;
+            quantityLabel.classList.add('block', 'text-gray-700', 'text-sm', 'font-bold', 'mb-2');
+            quantityLabel.innerText = 'Quantidade:';
+
+            // Quantity Input
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.name = 'quantity[]';
+            quantityInput.id = `quantity_${productItemCount}`;
+            quantityInput.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
+            quantityInput.min = '1';
+            quantityInput.value = '1';
+            quantityInput.required = true;
+            
+            // Remove Button
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.classList.add('bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-1', 'px-2', 'rounded', 'text-xs');
+            removeButton.innerText = 'Remover';
+            removeButton.onclick = function() {
+                this.closest('.product-item').remove();
+            };
+
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('mb-2');
+            productDiv.appendChild(productLabel);
+            productDiv.appendChild(productSelect);
+
+            const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('mb-2');
+            quantityDiv.appendChild(quantityLabel);
+            quantityDiv.appendChild(quantityInput);
+
+            newItem.appendChild(productDiv);
+            newItem.appendChild(quantityDiv);
+            newItem.appendChild(removeButton);
+
             container.appendChild(newItem);
             productItemCount++;
         });
