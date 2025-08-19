@@ -5,7 +5,7 @@ session_start();
 $db_host = 'sql303.infinityfree.com';
 $db_name = 'if0_39743407_casinha_cafe';
 $db_user = 'if0_39743407';
-$db_pass = 'SUA_SENHA_DO_MYSQL_AQUI'; // *** SUBSTITUA PELA SUA SENHA REAL DO MYSQL ***
+$db_pass = '22320133'; // *** SUBSTITUA PELA SUA SENHA REAL DO MYSQL ***
 $db_port = '3306';
 
 $dsn = "mysql:host=$db_host;dbname=$db_name;port=$db_port";
