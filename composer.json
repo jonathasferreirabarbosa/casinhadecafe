@@ -1,0 +1,12 @@
+{
+    "name": "casinha/cafe",
+    "description": "Projeto Casinha de Café",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Casinha\\Cafe\\": "src/"
+        }
+    },
+    "require": {}
+}
