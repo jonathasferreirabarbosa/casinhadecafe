@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <form action="/register.php" method="POST">
+                <form action="/register.php" method="POST">
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
                 <input type="email" id="email" name="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="text-center mt-4">
-                <a href="/login.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
+                <a href="/Casinha/login.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
                     Já tem uma conta? Faça o login
                 </a>
             </div>

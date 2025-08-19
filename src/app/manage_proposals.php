@@ -207,7 +207,7 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
                                 <td class="py-2 px-4 border-b text-center">
                                     <button onclick="editProposal(<?= htmlspecialchars(json_encode($proposal)) ?>)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-xs">Editar</button>
                                     <a href="/manage_proposals.php?delete=<?= $proposal['id'] ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('Tem certeza que deseja deletar esta proposta?');">Deletar</a>
-                                    <a href="/generate_pdf.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs">Gerar PDF</a>
+                                                <a href="/generate_pdf.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs">Gerar PDF</a>
                                 </td>
                             </tr>
                         <?php } endforeach; ?>

@@ -38,9 +38,7 @@ if (!isset($_SESSION['user_id'])) {
         <header class="bg-white shadow-md">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold">Painel de Gestão</h1>
-                <a href="/logout.php" class="px-4 py-2 font-semibold text-white brand-pink-500 rounded-md hover:brand-pink-600">
-                    Sair
-                </a>
+                                <a href="/logout.php" class="px-4 py-2 font-semibold text-white brand-pink-500 rounded-md hover:brand-pink-600">
             </div>
         </header>
 
