@@ -49,7 +49,7 @@ if (!isset($_SESSION['user_id'])) {
                 <ul class="flex space-x-4">
                     <li><a href="/manage_products.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Produtos</a></li>
                     <li><a href="/manage_clients.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Clientes</a></li>
-                    <li><a href="/manage_proposals.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Propostas</a></li>
+                                        <li><a href="/manage_proposals.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Propostas</a></li>
                 </ul>
             </nav>
 

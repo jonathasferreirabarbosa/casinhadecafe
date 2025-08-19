@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
              <div class="text-center mt-4">
-                <a href="/Casinha/register.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
+                <a href="/register.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
                     Não tem uma conta? Crie uma agora
                 </a>
             </div>

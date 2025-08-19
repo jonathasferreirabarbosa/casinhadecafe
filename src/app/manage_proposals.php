@@ -140,7 +140,7 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
 
             <div class="bg-white p-8 rounded-lg shadow-lg mb-6">
                 <h2 class="text-2xl font-semibold mb-4">Adicionar/Editar Proposta</h2>
-                <form action="/manage_proposals.php" method="POST">
+                                <form action="/manage_proposals.php" method="POST">
                     <input type="hidden" name="id" id="proposal_id">
                     <div class="mb-4">
                         <label for="client_id" class="block text-gray-700 text-sm font-bold mb-2">Cliente:</label>
