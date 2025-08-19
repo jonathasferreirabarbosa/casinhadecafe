@@ -7,7 +7,7 @@ if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
     try {
-        $stmt = $pdo->prepare("UPDATE proposals SET status = 'accepted', client_acceptance_date = NOW() WHERE unique_url_token = ? AND status = 'pending'");
+        $stmt = $pdo->prepare("UPDATE proposals SET status = 'aceita', client_acceptance_date = NOW() WHERE unique_url_token = ? AND status = 'pendente'");
         $stmt->execute([$token]);
 
         if ($stmt->rowCount() > 0) {

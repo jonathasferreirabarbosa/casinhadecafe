@@ -26,7 +26,7 @@ CREATE TABLE proposals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
     proposal_date DATE NOT NULL,
-    status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+    status ENUM('pendente', 'aceita', 'rejeitada') DEFAULT 'pendente',
     unique_url_token VARCHAR(255) UNIQUE NOT NULL,
     pdf_path VARCHAR(255),
     client_acceptance_date TIMESTAMP NULL,
