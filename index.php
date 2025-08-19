@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $request_uri = trim($_SERVER['REQUEST_URI'], '/');
 
@@ -16,8 +19,12 @@ if (empty($request_uri)) {
     $request_uri = 'login.php';
 }
 
+echo "Request URI: " . $request_uri . "<br>"; // Debugging line
+
 // Map requested URI to actual file path in src/app
 $file_path = __DIR__ . '/../src/app/' . $request_uri;
+
+echo "File Path: " . $file_path . "<br>"; // Debugging line
 
 // Basic routing: include the file if it exists, otherwise show 404
 if (file_exists($file_path)) {
