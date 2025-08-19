@@ -46,6 +46,15 @@ if (!isset($_SESSION['user_id'])) {
 
         <main class="flex-grow container mx-auto p-6">
             <h2 class="text-3xl font-semibold mb-6">Bem-vinda, Adriana!</h2>
+
+            <nav class="mb-6">
+                <ul class="flex space-x-4">
+                    <li><a href="manage_products.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Produtos</a></li>
+                    <li><a href="manage_clients.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Clientes</a></li>
+                    <li><a href="manage_proposals.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Propostas</a></li>
+                </ul>
+            </nav>
+
             <div class="bg-white p-8 rounded-lg shadow-lg">
                 <p>Este é o seu painel de controlo. Futuramente, aqui poderá gerir os seus produtos, ver as suas encomendas e muito mais.</p>
             </div>
