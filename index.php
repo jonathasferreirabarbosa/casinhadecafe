@@ -14,9 +14,19 @@ if (!empty($base_dir) && strpos($request_uri, $base_dir) === 0) {
     $request_uri = trim($request_uri, '/');
 }
 
-// Default to login page if no specific page is requested
+// Default to index.html if no specific page is requested (root URL)
 if (empty($request_uri)) {
-    $request_uri = 'login.php';
+    $file_path = __DIR__ . '/index.html'; // Path to the institutional page
+    if (file_exists($file_path)) {
+        require_once $file_path;
+        exit; // Stop execution after serving index.html
+    } else {
+        // Fallback if index.html is not found
+        http_response_code(404);
+        echo "<h1>404 Not Found</h1>";
+        echo "<p>The home page could not be found.</p>";
+        exit;
+    }
 }
 
 echo "Request URI: " . $request_uri . "<br>"; // Debugging line
