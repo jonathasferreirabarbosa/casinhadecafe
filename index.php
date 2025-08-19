@@ -31,8 +31,12 @@ if (empty($request_uri)) {
 
 echo "Request URI: " . $request_uri . "<br>"; // Debugging line
 
+// Extract only the path component from $request_uri
+$path_only = parse_url($request_uri, PHP_URL_PATH);
+$path_only = trim($path_only, '/'); // Trim leading/trailing slashes again
+
 // Map requested URI to actual file path in src/app
-$file_path = __DIR__ . '/src/app/' . $request_uri;
+$file_path = __DIR__ . '/src/app/' . $path_only;
 
 echo "File Path: " . $file_path . "<br>"; // Debugging line
 
