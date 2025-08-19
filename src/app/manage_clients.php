@@ -153,15 +153,20 @@ $clients = $pdo->query("SELECT * FROM clients")->fetchAll();
     </div>
 
     <script>
-        function editClient(client) {
-            document.getElementById('client_id').value = client.id;
-            document.getElementById('name').value = client.name;
-            document.getElementById('email').value = client.email;
-            document.getElementById('phone').value = client.phone;
-            document.getElementById('address').value = client.address;
-            document.getElementById('submit_button').value = 'edit';
-            document.getElementById('submit_button').innerText = 'Atualizar Cliente';
+        function clearClientForm() {
+            document.getElementById('client_id').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('submit_button').value = 'add';
+            document.getElementById('submit_button').innerText = 'Adicionar Cliente';
         }
-    </script>
-</body>
-</html>
+
+        // Call clearClientForm on page load to ensure clean state
+        document.addEventListener('DOMContentLoaded', clearClientForm);
+
+        // Call clearClientForm after successful form submission (assuming page reload)
+        <?php if ($message && (strpos($message, "adicionado com sucesso") !== false || strpos($message, "atualizado com sucesso") !== false)): ?>
+            clearClientForm();
+        <?php endif; ?>

@@ -153,15 +153,20 @@ $products = $pdo->query("SELECT * FROM products")->fetchAll();
     </div>
 
     <script>
-        function editProduct(product) {
-            document.getElementById('product_id').value = product.id;
-            document.getElementById('name').value = product.name;
-            document.getElementById('description').value = product.description;
-            document.getElementById('price').value = product.price;
-            document.getElementById('stock').value = product.stock;
-            document.getElementById('submit_button').value = 'edit';
-            document.getElementById('submit_button').innerText = 'Atualizar Produto';
+        function clearProductForm() {
+            document.getElementById('product_id').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('stock').value = '';
+            document.getElementById('submit_button').value = 'add';
+            document.getElementById('submit_button').innerText = 'Adicionar Produto';
         }
-    </script>
-</body>
-</html>
+
+        // Call clearProductForm on page load to ensure clean state
+        document.addEventListener('DOMContentLoaded', clearProductForm);
+
+        // Call clearProductForm after successful form submission (assuming page reload)
+        <?php if ($message && (strpos($message, "adicionado com sucesso") !== false || strpos($message, "atualizado com sucesso") !== false)): ?>
+            clearProductForm();
+        <?php endif; ?>
