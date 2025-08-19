@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $item_stmt->execute([$proposal_id, $product_id, $quantity, $unit_price, $total_price]);
                     }
 
-                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"view_proposal.php?token={$unique_url_token}\" target=\"_blank\" class=\"text-blue-600 hover:underline\">view_proposal.php?token={$unique_url_token}</a>";
+                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"view_proposal.php?token={$unique_url_token}\" target="_blank" class="text-blue-600 hover:underline">view_proposal.php?token={$unique_url_token}</a>";
                 } else {
                     $message = "Erro ao adicionar proposta.";
                 }
@@ -215,26 +215,32 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
     </div>
 
     <script>
+        const products = <?= json_encode($products) ?>;
         let productItemCount = 1;
+
         document.getElementById('add_product_item').addEventListener('click', function() {
             const container = document.getElementById('product_items_container');
             const newItem = document.createElement('div');
             newItem.classList.add('product-item', 'mb-4', 'p-4', 'border', 'rounded');
-            newItem.innerHTML = '
+
+            let productOptions = '';
+            products.forEach(product => {
+                productOptions += `<option value="${product.id}" data-price="${product.price}">${product.name} (R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')})</option>`;
+            });
+
+            newItem.innerHTML = `
                 <div class="mb-2">
-                    <label for="product_id_' + productItemCount + '" class="block text-gray-700 text-sm font-bold mb-2">Produto:</label>
-                    <select name="product_id[]" id="product_id_' + productItemCount + '" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        <?php foreach ($products as $product): ?>
-                            <option value="<?= $product['id'] ?>" data-price="<?= $product['price'] ?>"><?= $product['name'] ?> (R$ <?= number_format($product['price'], 2, ",", ".") ?>)</option>
-                        <?php endforeach; ?>
+                    <label for="product_id_${productItemCount}" class="block text-gray-700 text-sm font-bold mb-2">Produto:</label>
+                    <select name="product_id[]" id="product_id_${productItemCount}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        ${productOptions}
                     </select>
                 </div>
                 <div class="mb-2">
-                    <label for="quantity_' + productItemCount + '" class="block text-gray-700 text-sm font-bold mb-2">Quantidade:</label>
-                    <input type="number" name="quantity[]" id="quantity_' + productItemCount + '" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="1" value="1" required>
+                    <label for="quantity_${productItemCount}" class="block text-gray-700 text-sm font-bold mb-2">Quantidade:</label>
+                    <input type="number" name="quantity[]" id="quantity_${productItemCount}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="1" value="1" required>
                 </div>
-                <button type="button" onclick="this.closest(\".product-item\").remove()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">Remover</button>
-            ';
+                <button type="button" onclick="this.closest('.product-item').remove()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">Remover</button>
+            `;
             container.appendChild(newItem);
             productItemCount++;
         });
