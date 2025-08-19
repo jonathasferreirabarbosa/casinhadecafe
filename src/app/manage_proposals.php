@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $item_stmt->execute([$proposal_id, $product_id, $quantity, $unit_price, $total_price]);
                     }
 
-                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"view_proposal.php?token={$unique_url_token}\" target=\"_blank\" class=\"text-blue-600 hover:underline\">view_proposal.php?token={$unique_url_token}</a>";
+                    $message = "Proposta adicionada com sucesso! URL Única: <a href=\"/view_proposal.php?token={$unique_url_token}\" target=\"_blank\" class=\"text-blue-600 hover:underline\">/view_proposal.php?token={$unique_url_token}</a>";
                 } else {
                     $message = "Erro ao adicionar proposta.";
                 }
@@ -126,7 +126,7 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold">Gerenciar Propostas</h1>
                 <nav>
-                    <a href="admin-dashboard.php" class="text-blue-600 hover:underline">Voltar ao Dashboard</a>
+                    <a href="/admin-dashboard.php" class="text-blue-600 hover:underline">Voltar ao Dashboard</a>
                 </nav>
             </div>
         </header>
@@ -140,7 +140,7 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
 
             <div class="bg-white p-8 rounded-lg shadow-lg mb-6">
                 <h2 class="text-2xl font-semibold mb-4">Adicionar/Editar Proposta</h2>
-                <form action="manage_proposals.php" method="POST">
+                <form action="/manage_proposals.php" method="POST">
                     <input type="hidden" name="id" id="proposal_id">
                     <div class="mb-4">
                         <label for="client_id" class="block text-gray-700 text-sm font-bold mb-2">Cliente:</label>
@@ -202,12 +202,12 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
                                 <td class="py-2 px-4 border-b"><?= $proposal['proposal_date'] ?></td>
                                 <td class="py-2 px-4 border-b text-center"><?= ucfirst($proposal['status']) ?></td>
                                 <td class="py-2 px-4 border-b">
-                                    <a href="view_proposal.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="text-blue-600 hover:underline">Ver Proposta</a>
+                                    <a href="/view_proposal.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="text-blue-600 hover:underline">Ver Proposta</a>
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <button onclick="editProposal(<?= htmlspecialchars(json_encode($proposal)) ?>)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-xs">Editar</button>
-                                    <a href="manage_proposals.php?delete=<?= $proposal['id'] ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('Tem certeza que deseja deletar esta proposta?');">Deletar</a>
-                                    <a href="generate_pdf.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs">Gerar PDF</a>
+                                    <a href="/manage_proposals.php?delete=<?= $proposal['id'] ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('Tem certeza que deseja deletar esta proposta?');">Deletar</a>
+                                    <a href="/generate_pdf.php?token=<?= $proposal['unique_url_token'] ?>" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs">Gerar PDF</a>
                                 </td>
                             </tr>
                         <?php } endforeach; ?>

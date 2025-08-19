@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
 
 $message = '';
 
@@ -23,6 +23,6 @@ if (isset($_GET['token'])) {
 }
 
 // Redireciona de volta para a visualização da proposta com uma mensagem
-header("Location: view_proposal.php?token={$token}&message=" . urlencode($message));
+header("Location: /view_proposal.php?token={$token}&message=" . urlencode($message));
 exit;
 ?>

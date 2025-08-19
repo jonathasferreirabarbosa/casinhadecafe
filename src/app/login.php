@@ -1,37 +1,29 @@
 <?php
-// Detalhes da conexão MySQL para InfinityFree
-$db_host = 'sql303.infinityfree.com';
-$db_name = 'if0_39743407_casinha_cafe';
-$db_user = 'if0_39743407';
-$db_pass = '22320133'; // *** SUBSTITUA PELA SUA SENHA REAL DO MYSQL ***
-$db_port = '3306';
-
-$dsn = "mysql:host=$db_host;dbname=$db_name;port=$db_port";
+session_start();
+require_once __DIR__ . '/../config/database.php';
 
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $pdo = new PDO($dsn, $db_user, $db_pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $email = $_POST['email'];
-        // Hash da senha para armazenamento seguro
-        $password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = $_POST['password'];
 
-        $stmt = $pdo->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)");
-        $stmt->execute(['email' => $email, 'password_hash' => $password_hash]);
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch();
 
-        $message = 'Usuário criado com sucesso! Você já pode fazer o login.';
-
-    } catch (PDOException $e) {
-        if ($e->getCode() == 23000) { // Código de violação de unicidade para MySQL (geral)
-            $message = 'Este email já existe. Por favor, escolha outro.';
+        if ($user && password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $email;
+            header('Location: /admin-dashboard.php');
+            exit;
         } else {
-            $message = 'Erro ao registrar o usuário: ' . $e->getMessage();
-            // Em um ambiente de produção, você logaria o erro em vez de exibi-lo.
-            // error_log($e->getMessage());
+            $message = 'Usuário ou senha inválidos.';
         }
+    } catch (PDOException $e) {
+        $message = 'Erro de conexão com o banco de dados: ' . $e->getMessage();
+        // Em um ambiente de produção, você logaria o erro em vez de exibi-lo.
+        // error_log($e->getMessage());
     }
 }
 ?>
@@ -40,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar - Administração</title>
+    <title>Login - Administração</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -56,17 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold brand-brown" style="font-family: 'Playfair Display', serif;">Criar Conta</h1>
+            <h1 class="text-3xl font-bold brand-brown" style="font-family: 'Playfair Display', serif;">Acesso Restrito</h1>
             <p class="text-gray-600">Administração da Casinha de Café</p>
         </div>
 
         <?php if ($message): ?>
-            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline"><?php echo htmlspecialchars($message); ?></span>
             </div>
         <?php endif; ?>
 
-        <form action="register.php" method="POST">
+        <form action="/login.php" method="POST">
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
                 <input type="email" id="email" name="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -77,12 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="flex items-center justify-between">
                 <button type="submit" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
-                    Criar Conta
+                    Entrar
                 </button>
             </div>
-            <div class="text-center mt-4">
-                <a href="login.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
-                    Já tem uma conta? Faça o login
+             <div class="text-center mt-4">
+                <a href="/register.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
+                    Não tem uma conta? Crie uma agora
                 </a>
             </div>
         </form>

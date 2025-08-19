@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -85,7 +85,7 @@ $clients = $pdo->query("SELECT * FROM clients")->fetchAll();
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold">Gerenciar Clientes</h1>
                 <nav>
-                    <a href="admin-dashboard.php" class="text-blue-600 hover:underline">Voltar ao Dashboard</a>
+                    <a href="/admin-dashboard.php" class="text-blue-600 hover:underline">Voltar ao Dashboard</a>
                 </nav>
             </div>
         </header>
@@ -99,7 +99,7 @@ $clients = $pdo->query("SELECT * FROM clients")->fetchAll();
 
             <div class="bg-white p-8 rounded-lg shadow-lg mb-6">
                 <h2 class="text-2xl font-semibold mb-4">Adicionar/Editar Cliente</h2>
-                <form action="manage_clients.php" method="POST">
+                <form action="/manage_clients.php" method="POST">
                     <input type="hidden" name="id" id="client_id">
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nome:</label>
@@ -142,7 +142,7 @@ $clients = $pdo->query("SELECT * FROM clients")->fetchAll();
                                 <td class="py-2 px-4 border-b"><?= $client['phone'] ?></td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <button onclick="editClient(<?= htmlspecialchars(json_encode($client)) ?>)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded text-xs">Editar</button>
-                                    <a href="manage_clients.php?delete=<?= $client['id'] ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('Tem certeza que deseja deletar este cliente?');">Deletar</a>
+                                    <a href="/manage_clients.php?delete=<?= $client['id'] ?>" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs" onclick="return confirm('Tem certeza que deseja deletar este cliente?');">Deletar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

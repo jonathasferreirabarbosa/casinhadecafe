@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
 
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
@@ -41,7 +41,8 @@ if (isset($_GET['token'])) {
         echo "<p>Esta página simula a geração de um PDF. Em uma implementação real, um arquivo PDF seria gerado e baixado aqui.</p>";
         echo "<h2>Detalhes da Proposta:</h2>";
         echo "<p><strong>Cliente:</strong> " . $proposal['client_name'] . "</p>";
-        echo "<p><strong>Data:</strong> " . $proposal['proposal_date'] . "</p>";
+        echo "<p><strong>Data:</strong> " . $proposal['proposal_date'] . "</p>
+";
         echo "<p><strong>Status:</strong> " . ucfirst($proposal['status']) . "</p>";
         echo "<h3>Itens:</h3>";
         echo "<ul>";

@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 ?>
@@ -38,7 +38,7 @@ if (!isset($_SESSION['user_id'])) {
         <header class="bg-white shadow-md">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold">Painel de Gestão</h1>
-                <a href="logout.php" class="px-4 py-2 font-semibold text-white brand-pink-500 rounded-md hover:brand-pink-600">
+                <a href="/logout.php" class="px-4 py-2 font-semibold text-white brand-pink-500 rounded-md hover:brand-pink-600">
                     Sair
                 </a>
             </div>
@@ -49,9 +49,9 @@ if (!isset($_SESSION['user_id'])) {
 
             <nav class="mb-6">
                 <ul class="flex space-x-4">
-                    <li><a href="manage_products.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Produtos</a></li>
-                    <li><a href="manage_clients.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Clientes</a></li>
-                    <li><a href="manage_proposals.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Propostas</a></li>
+                    <li><a href="/manage_products.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Produtos</a></li>
+                    <li><a href="/manage_clients.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Clientes</a></li>
+                    <li><a href="/manage_proposals.php" class="text-lg font-medium text-blue-600 hover:text-blue-800">Gerenciar Propostas</a></li>
                 </ul>
             </nav>
 

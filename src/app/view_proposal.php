@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connect.php';
+require_once __DIR__ . '/../config/database.php';
 
 $proposal = null;
 $message = '';
@@ -161,7 +161,7 @@ if (isset($_GET['token'])) {
                 <?php if ($proposal['status'] == 'pendente'): ?>
                     <div class="text-center mb-6">
                         <p class="mb-4">Para aceitar esta proposta, por favor, clique no botão abaixo.</p>
-                        <a href="accept_proposal.php?token=<?= $proposal['unique_url_token'] ?>" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline text-lg" onclick="return confirm('Tem certeza que deseja aceitar esta proposta?');">Aceitar Proposta</a>
+                        <a href="/accept_proposal.php?token=<?= $proposal['unique_url_token'] ?>" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline text-lg" onclick="return confirm('Tem certeza que deseja aceitar esta proposta?');">Aceitar Proposta</a>
                     </div>
                 <?php elseif ($proposal['status'] == 'aceita'): ?>
                      <div class="text-center p-4 bg-green-50 rounded-lg">
