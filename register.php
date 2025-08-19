@@ -1,12 +1,18 @@
 <?php
-// **IMPORTANTE**: Substitua pela sua connection string do Neon.tech
-$connection_string = "postgresql://neondb_owner:npg_rel3YQIj7BWG@ep-bitter-cell-aesvs7ty-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+// Detalhes da conexão MySQL para InfinityFree
+$db_host = 'sql303.infinityfree.com';
+$db_name = 'if0_39743407_casinha_cafe';
+$db_user = 'if0_39743407';
+$db_pass = '********'; // *** SUBSTITUA PELA SUA SENHA REAL DO MYSQL ***
+$db_port = '3306';
+
+$dsn = "mysql:host=$db_host;dbname=$db_name;port=$db_port";
 
 $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($connection_string) && $connection_string !== 'SUA_CONNECTION_STRING_AQUI') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $pdo = new PDO($connection_string);
+        $pdo = new PDO($dsn, $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $email = $_POST['email'];
@@ -19,16 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($connection_string) && $conn
         $message = 'Usuário criado com sucesso! Você já pode fazer o login.';
 
     } catch (PDOException $e) {
-        if ($e->getCode() == 23505) { // Código de violação de unicidade para PostgreSQL
-            $message = 'Este nome de usuário já existe. Por favor, escolha outro.';
+        if ($e->getCode() == 23000) { // Código de violação de unicidade para MySQL (geral)
+            $message = 'Este email já existe. Por favor, escolha outro.';
         } else {
-            $message = 'Erro ao registrar o usuário.';
+            $message = 'Erro ao registrar o usuário: ' . $e->getMessage();
             // Em um ambiente de produção, você logaria o erro em vez de exibi-lo.
             // error_log($e->getMessage());
         }
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $message = 'A connection string do banco de dados não foi configurada.';
 }
 ?>
 <!DOCTYPE html>
