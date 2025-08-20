@@ -218,104 +218,34 @@ $products = $pdo->query("SELECT id, name, price FROM products")->fetchAll();
     </div>
 
     <script>
-        const products = <?php echo json_encode($products); ?>;
-        let productItemCount = 1;
-
-        document.getElementById('add_product_item').addEventListener('click', function() {
-            const container = document.getElementById('product_items_container');
+        function clearProposalForm() {
+            document.getElementById('proposal_id').value = '';
+            document.getElementById('client_id').value = '';
+            document.getElementById('proposal_date').value = '';
+            document.getElementById('submit_button').value = 'add';
+            document.getElementById('submit_button').innerText = 'Adicionar Proposta';
             
-            const newItem = document.createElement('div');
-            newItem.classList.add('product-item', 'mb-4', 'p-4', 'border', 'rounded');
+            // Clear dynamic product items
+            const container = document.getElementById('product_items_container');
+            container.innerHTML = '<h3 class="text-xl font-semibold mb-2">Itens da Proposta</h3><div class="product-item mb-4 p-4 border rounded"><div class="mb-2"><label for="product_id_0" class="block text-gray-700 text-sm font-bold mb-2">Produto:</label><select name="product_id[]" id="product_id_0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></select></div><div class="mb-2"><label for="quantity_0" class="block text-gray-700 text-sm font-bold mb-2">Quantidade:</label><input type="number" name="quantity[]" id="quantity_0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="1" value="1" required></div></div>';
+            productItemCount = 1; // Reset count for new items
 
-            // Product Label
-            const productLabel = document.createElement('label');
-            productLabel.htmlFor = `product_id_${productItemCount}`;
-            productLabel.classList.add('block', 'text-gray-700', 'text-sm', 'font-bold', 'mb-2');
-            productLabel.innerText = 'Produto:';
-
-            // Product Select
-            const productSelect = document.createElement('select');
-            productSelect.name = 'product_id[]';
-            productSelect.id = `product_id_${productItemCount}`;
-            productSelect.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
-            productSelect.required = true;
-
+            // Re-populate product options for the first item
+            const firstProductSelect = document.getElementById('product_id_0');
+            firstProductSelect.innerHTML = ''; // Clear existing options
             products.forEach(product => {
                 const option = document.createElement('option');
                 option.value = product.id;
                 option.dataset.price = product.price;
                 option.innerText = `${product.name} (R$ ${parseFloat(product.price).toFixed(2).replace('.', ',')})`;
-                productSelect.appendChild(option);
+                firstProductSelect.appendChild(option);
             });
-
-            // Quantity Label
-            const quantityLabel = document.createElement('label');
-            quantityLabel.htmlFor = `quantity_${productItemCount}`;
-            quantityLabel.classList.add('block', 'text-gray-700', 'text-sm', 'font-bold', 'mb-2');
-            quantityLabel.innerText = 'Quantidade:';
-
-            // Quantity Input
-            const quantityInput = document.createElement('input');
-            quantityInput.type = 'number';
-            quantityInput.name = 'quantity[]';
-            quantityInput.id = `quantity_${productItemCount}`;
-            quantityInput.classList.add('shadow', 'appearance-none', 'border', 'rounded', 'w-full', 'py-2', 'px-3', 'text-gray-700', 'leading-tight', 'focus:outline-none', 'focus:shadow-outline');
-            quantityInput.min = '1';
-            quantityInput.value = '1';
-            quantityInput.required = true;
-            
-            // Remove Button
-            const removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.classList.add('bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-1', 'px-2', 'rounded', 'text-xs');
-            removeButton.innerText = 'Remover';
-            removeButton.onclick = function() {
-                this.closest('.product-item').remove();
-            };
-
-            const productDiv = document.createElement('div');
-            productDiv.classList.add('mb-2');
-            productDiv.appendChild(productLabel);
-            productDiv.appendChild(productSelect);
-
-            const quantityDiv = document.createElement('div');
-            quantityDiv.classList.add('mb-2');
-            quantityDiv.appendChild(quantityLabel);
-            quantityDiv.appendChild(quantityInput);
-
-            newItem.appendChild(productDiv);
-            newItem.appendChild(quantityDiv);
-            newItem.appendChild(removeButton);
-
-            container.appendChild(newItem);
-            productItemCount++;
-        });
-
-        function editProposal(proposal) {
-            document.getElementById('proposal_id').value = proposal.id;
-            document.getElementById('client_id').value = proposal.client_id;
-            document.getElementById('proposal_date').value = proposal.proposal_date;
-            document.getElementById('submit_button').value = 'edit';
-            document.getElementById('submit_button').innerText = 'Atualizar Proposta';
-
-            // Limpar itens de produto existentes para edição
-            const container = document.getElementById('product_items_container');
-            container.innerHTML = '<h3 class="text-xl font-semibold mb-2">Itens da Proposta</h3>';
-            productItemCount = 0;
-
-            // Você precisaria de uma requisição AJAX para buscar os itens da proposta para preencher aqui
-            // Por simplicidade, para a edição, o usuário terá que readicionar os itens manualmente ou você pode implementar a busca via AJAX.
-            // Exemplo de como seria a estrutura se você buscasse os itens:
-            /*
-            fetch(`get_proposal_items.php?proposal_id=${proposal.id}`)
-                .then(response => response.json())
-                .then(items => {
-                    items.forEach(item => {
-                        // Adicionar item ao formulário
-                    });
-                });
-            */
         }
-    </script>
-</body>
-</html>
+
+        // Call clearProposalForm on page load to ensure clean state
+        document.addEventListener('DOMContentLoaded', clearProposalForm);
+
+        // Call clearProposalForm after successful form submission (assuming page reload)
+        <?php if ($message && (strpos($message, "adicionado com sucesso") !== false || strpos($message, "atualizado com sucesso") !== false)): ?>
+            clearProposalForm();
+        <?php endif; ?>
