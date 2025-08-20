@@ -57,6 +57,9 @@ if (!isset($_SESSION['user_id'])) {
             border: none;
             width: 100%;
             height: 100%;
+            background-color: #F9FAFB; /* Match main content background */
+            border-radius: 8px; /* Rounded corners for the iframe */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
         }
     </style>
 </head>
@@ -71,8 +74,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <nav class="flex-grow">
                 <ul>
-                    <li>
-                        <a href="/admin-dashboard.php" target="content_frame" class="active">
+                    <a href="/dashboard_home.php" target="content_frame" class="active">
                             <i class="fas fa-home"></i>
                             Dashboard
                         </a>
@@ -107,7 +109,7 @@ if (!isset($_SESSION['user_id'])) {
 
         <!-- Main Content Area -->
         <main class="flex-grow p-6 bg-gray-50">
-            <iframe name="content_frame" class="content-iframe" src="/manage_clients.php"></iframe>
+            <iframe name="content_frame" class="content-iframe" src="/dashboard_home.php"></iframe>
         </main>
     </div>
 
@@ -144,8 +146,8 @@ if (!isset($_SESSION['user_id'])) {
                     // Prevent default link behavior if it's the dashboard link
                     if (link.getAttribute('href') === '/admin-dashboard.php') {
                         event.preventDefault();
-                        // Load manage_clients.php as default for dashboard
-                        iframe.src = '/manage_clients.php';
+                        // Load dashboard_home.php as default for dashboard
+                        iframe.src = '/dashboard_home.php';
                         setActiveLink(link.href);
                     } else {
                         setActiveLink(link.href);
@@ -154,7 +156,7 @@ if (!isset($_SESSION['user_id'])) {
             });
 
             // Initial load of content into iframe
-            iframe.src = '/manage_clients.php';
+            iframe.src = '/dashboard_home.php';
         });
     </script>
 

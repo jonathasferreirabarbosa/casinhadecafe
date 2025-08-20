@@ -38,9 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #FDF8F5;
+            color: #4A2E2A;
         }
         .brand-brown {
             color: #6b4f4b;
+        }
+        .input-field {
+            @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline;
+        }
+        .btn-primary {
+            @apply bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full;
+        }
+        .link-secondary {
+            @apply inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800;
         }
     </style>
 </head>
@@ -61,19 +72,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="/login.php" method="POST">
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-                <input type="email" id="email" name="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="email" id="email" name="email" required class="input-field">
             </div>
             <div class="mb-6">
                 <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Senha:</label>
-                <input type="password" id="password" name="password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="password" id="password" name="password" required class="input-field mb-3">
             </div>
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                <button type="submit" class="btn-primary">
                     Entrar
                 </button>
             </div>
              <div class="text-center mt-4">
-                <a href="/register.php" class="inline-block align-baseline font-bold text-sm text-pink-500 hover:text-pink-800">
+                <a href="/register.php" class="link-secondary">
                     Não tem uma conta? Crie uma agora
                 </a>
             </div>
