@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    
-    # Redireciona todas as requisições para a pasta /public
+    RewriteEngine On
+
+    # Apenas reescreve se a URL já não começar com /public/
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>

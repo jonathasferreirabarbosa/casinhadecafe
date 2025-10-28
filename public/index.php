@@ -14,6 +14,13 @@ require_once ROOT_PATH . '/app/Core/Database.php';
 
 <?php
 
+// --- DEBUG ---
+// Força a exibição de todos os erros do PHP. Remover em produção.
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+// --- FIM DEBUG ---
+
+
 // --- Ponto de Entrada da Aplicação (Front Controller) ---
 
 session_start();
