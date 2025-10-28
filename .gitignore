@@ -1,0 +1,14 @@
+# Arquivo de configuração local. NÃO ENVIE PARA O GIT.
+config/database.php
+
+# Arquivos de variáveis de ambiente
+.env
+
+# Dependências do Composer
+vendor/
+
+# Dependências do Node.js
+node_modules/
+
+# Logs
+*.log
