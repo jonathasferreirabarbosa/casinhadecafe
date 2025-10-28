@@ -1,0 +1,16 @@
+{
+    "name": "casinhacafe/website",
+    "description": "Plataforma de gestão e vendas para a Casinha de Café.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Casinha de Café"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

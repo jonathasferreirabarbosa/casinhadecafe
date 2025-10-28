@@ -1,0 +1,46 @@
+# Nome do seu Workflow
+name: Deploy to InfinityFree via FTP
+
+# Define o gatilho: este workflow roda a cada push na branch 'main'
+on:
+  push:
+    branches: [ main ]
+
+# Tarefas que serão executadas
+jobs:
+  deploy:
+    # O tipo de máquina virtual que a tarefa vai rodar
+    runs-on: ubuntu-latest
+
+    # Passos da tarefa
+    steps:
+    # 1. Faz o checkout do seu repositório para a máquina virtual
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Instala dependências do Composer (se você usa o composer)
+    #    Se seu projeto não usa Composer, pode remover este passo.
+    - name: Setup PHP and Install Dependencies
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1' # Mude para a sua versão do PHP
+    - run: composer install --prefer-dist --no-progress --no-dev
+
+    # 3. Sincroniza os arquivos com o servidor FTP
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        # Endereço do servidor FTP (do secret que criamos)
+        server: ${{ secrets.FTP_SERVER }}
+        # Nome de usuário do FTP (do secret)
+        username: ${{ secrets.FTP_USERNAME }}
+        # Senha do FTP (do secret)
+        password: ${{ secrets.FTP_PASSWORD }}
+        # Diretório remoto para onde os arquivos serão enviados
+        # Geralmente 'htdocs' no InfinityFree. Verifique na sua conta.
+        server-dir: /htdocs/
+        # Exclui o diretório .git e o próprio workflow do envio
+        exclude: |
+          **/.git*
+          **/.git*/**
+          .github/**
