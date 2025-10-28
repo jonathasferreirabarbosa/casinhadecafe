@@ -34,17 +34,44 @@ class Router {
 
     /**
      * Despacha a requisição para o controller e método correspondente à URI.
-     * Esta é uma implementação básica que será expandida.
      */
     public function dispatch() {
-        // Por enquanto, apenas uma mensagem para indicar que o Router está no lugar.
-        echo "<p>Router->dispatch() foi chamado. A lógica de roteamento será implementada aqui.</p>";
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
 
-        // A lógica futura irá:
-        // 1. Pegar a URI da requisição atual (ex: /produtos)
-        // 2. Pegar o método da requisição (GET, POST)
-        // 3. Procurar na lista $this->routes por uma rota correspondente.
-        // 4. Se encontrar, instanciar o Controller e chamar o método.
-        // 5. Se não encontrar, retornar um erro 404 (Não Encontrado).
+        // Remove a base path da URL, se aplicável (para rodar em subdiretório)
+        $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
+        if (strpos($uri, $basePath) === 0) {
+            $uri = substr($uri, strlen($basePath));
+        }
+        $uri = $uri ?: '/';
+
+        foreach ($this->routes as $route) {
+            if ($route['uri'] === $uri && $route['method'] === $method) {
+                // Rota encontrada, vamos processar o controller
+                $controllerParts = explode('@', $route['controller']);
+                $controllerName = $controllerParts[0];
+                $methodName = $controllerParts[1];
+
+                $controllerFile = ROOT_PATH . '/app/Controllers/' . $controllerName . '.php';
+                if (file_exists($controllerFile)) {
+                    require_once $controllerFile;
+                    $controller = new $controllerName();
+                    $controller->$methodName();
+                    return;
+                }
+            }
+        }
+
+        // Nenhuma rota encontrada
+        $this->sendNotFound();
+    }
+
+    protected function sendNotFound() {
+        http_response_code(404);
+        echo "<h1>404 - Página Não Encontrada</h1>";
+        // O ideal é ter uma view para a página 404
+        // $this->view('errors/404');
+        exit;
     }
 }
