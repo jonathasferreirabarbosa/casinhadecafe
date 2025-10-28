@@ -2,27 +2,6 @@
 
 // --- Ponto de Entrada da Aplicação (Front Controller) ---
 
-// Define uma constante para o diretório raiz do projeto para facilitar a inclusão de arquivos.
-// __DIR__ é o diretório do arquivo atual (public), então subimos um nível.
-define('ROOT_PATH', dirname(__DIR__));
-
-// Carrega o arquivo de configuração do banco de dados.
-require_once ROOT_PATH . '/config/database.php';
-
-// Carrega a classe principal de conexão com o banco de dados.
-require_once ROOT_PATH . '/app/Core/Database.php';
-
-<?php
-
-// --- DEBUG ---
-// Força a exibição de todos os erros do PHP. Remover em produção.
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-// --- FIM DEBUG ---
-
-
-// --- Ponto de Entrada da Aplicação (Front Controller) ---
-
 session_start();
 
 // Define uma constante para o diretório raiz do projeto.
@@ -50,4 +29,3 @@ $router->get('/test-db', 'HomeController@testDb');
 // --- Despacha a Requisição ---
 // O roteador encontra a rota correspondente à URL e executa o método do controller.
 $router->dispatch();
-
