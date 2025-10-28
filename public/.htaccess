@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redireciona requisições para a pasta /public se o servidor não estiver configurado para apontar para ela
+    # RewriteCond %{REQUEST_URI} !^/public/
+    # RewriteRule ^(.*)$ /public/$1 [L,R=301]
+
+    # Envia a requisição para o front controller, desde que não seja um arquivo ou diretório real
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
