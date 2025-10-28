@@ -34,6 +34,9 @@ $router = new Router();
 // Rota para a página inicial.
 $router->get('/', 'HomeController@index');
 
+// Rota para a página de teste do banco de dados.
+$router->get('/test-db', 'HomeController@testDb');
+
 // Outras rotas (ex: /login, /produtos, /admin/dashboard) serão adicionadas aqui.
 
 
