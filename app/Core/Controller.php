@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 abstract class Controller {
 
     /**
@@ -9,13 +11,12 @@ abstract class Controller {
      * @return object A instância do Model
      */
     protected function model($modelName) {
-        $modelFile = ROOT_PATH . '/app/Models/' . $modelName . '.php';
-        if (file_exists($modelFile)) {
-            require_once $modelFile;
-            return new $modelName();
+        $modelClass = '\\App\\Models\\' . $modelName;
+        if (class_exists($modelClass)) {
+            return new $modelClass();
         }
-        // Lança um erro se o arquivo do model não for encontrado.
-        throw new Exception("Model '{$modelName}' não encontrado em '{$modelFile}'.");
+        // Lança um erro se a classe do model não for encontrada.
+        throw new \Exception("Model '{$modelName}' não encontrado.");
     }
 
     /**
@@ -40,6 +41,6 @@ abstract class Controller {
             return;
         }
         // Lança um erro se o arquivo da view não for encontrado.
-        throw new Exception("View '{$viewName}' não encontrada em '{$viewFile}'.");
+        throw new \Exception("View '{$viewName}' não encontrada em '{$viewFile}'.");
     }
 }

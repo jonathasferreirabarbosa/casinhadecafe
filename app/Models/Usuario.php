@@ -1,8 +1,8 @@
 <?php
 
-require_once ROOT_PATH . '/app/Core/Model.php';
+namespace App\Models;
 
-class Usuario extends Model {
+class Usuario extends \App\Core\Model {
     
     protected $tabela = 'Usuarios';
 
@@ -15,7 +15,7 @@ class Usuario extends Model {
     public function findByEmail($email) {
         $sql = "SELECT * FROM {$this->tabela} WHERE email = :email";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetch();
     }
