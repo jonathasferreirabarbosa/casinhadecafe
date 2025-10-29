@@ -48,8 +48,6 @@ class Router {
         }
         $uri = $uri ?: '/';
 
-        die("DEBUG: Rota calculada: [" . $uri . "]"); // PONTO DE DEBUG
-
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
                 // Rota encontrada, vamos processar o controller
@@ -57,13 +55,17 @@ class Router {
                 $controllerName = $controllerParts[0];
                 $methodName = $controllerParts[1];
 
-                $controllerFile = ROOT_PATH . '/app/Controllers/' . $controllerName . '.php';
-                if (file_exists($controllerFile)) {
-                    require_once $controllerFile;
+                // Com o autoloader PSR-4, podemos instanciar a classe diretamente.
+                if (class_exists($controllerName)) {
                     $controller = new $controllerName();
-                    $controller->$methodName();
-                    return;
+                    if (method_exists($controller, $methodName)) {
+                        $controller->$methodName();
+                        return;
+                    }
                 }
+                
+                // Se a classe ou método não existir, cai para o 404.
+                break; 
             }
         }
 
