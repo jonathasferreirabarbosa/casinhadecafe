@@ -1,5 +1,19 @@
 <?php
 // View para a página de cadastro
+
+// Garante que a sessão está iniciada para podermos acessar as variáveis de sessão
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Pega a mensagem de erro da sessão, se existir
+$error_message = $_SESSION['error_message'] ?? null;
+unset($_SESSION['error_message']); // Limpa a mensagem para não ser exibida novamente
+
+// Pega o input antigo da sessão, se existir
+$old_input = $_SESSION['old_input'] ?? [];
+unset($_SESSION['old_input']); // Limpa para não repopular em uma visita nova
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,7 +34,7 @@
             --cor-suporte: #6D4C41;
             --cor-destaque: #A13333;
             --cor-sucesso: #556B2F;
-            --cor-aviso: #DAA520;
+            --cor-aviso: #DAA520; /* Amarelo para alertas */
             --fonte-titulos: 'Playfair Display', serif;
             --fonte-corpo: 'Lato', sans-serif;
         }
@@ -43,25 +57,44 @@
         .btn:hover { background-color: #8a2b2b; transform: translateY(-2px); }
         .login-link { text-align: center; margin-top: 20px; }
         .login-link a { color: var(--cor-destaque); text-decoration: none; font-weight: bold; }
+        
+        /* Estilo para a mensagem de erro */
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
+
+
     <div class="container">
         <h2><?php echo htmlspecialchars($titulo); ?></h2>
         
+        <?php if ($error_message): ?>
+            <div class="alert-error">
+                <?php echo htmlspecialchars($error_message); ?>
+            </div>
+        <?php endif; ?>
+
         <form action="/register" method="POST">
             <div class="form-group">
                 <label for="nome">Nome (Opcional)</label>
-                <input type="text" id="nome" name="nome">
+                <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($old_input['nome'] ?? ''); ?>">
             </div>
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($old_input['email'] ?? ''); ?>" required>
             </div>
             <div class="form-group">
                 <label for="telefone">Telefone</label>
-                <input type="tel" id="telefone" name="telefone" required>
+                <input type="tel" id="telefone" name="telefone" value="<?php echo htmlspecialchars($old_input['telefone'] ?? ''); ?>" required>
             </div>
             <div class="form-group">
                 <label for="senha">Senha</label>

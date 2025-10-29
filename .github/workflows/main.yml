@@ -38,7 +38,6 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         # Diretório remoto para onde os arquivos serão enviados
         # Geralmente 'htdocs' no InfinityFree. Verifique na sua conta.
-        server-dir: .
         # Exclui o diretório .git e o próprio workflow do envio
         exclude: |
           **/.git*

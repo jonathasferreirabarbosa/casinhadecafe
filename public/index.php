@@ -25,7 +25,13 @@ $router->get('/', '\App\Controllers\HomeController@index');
 $router->get('/register', '\App\Controllers\AuthController@register');
 $router->post('/register', '\App\Controllers\AuthController@store');
 
-// Outras rotas (ex: /login, /produtos, /admin/dashboard) serão adicionadas aqui.
+// Rotas de Login/Logout
+$router->get('/login', '\App\Controllers\AuthController@login');
+$router->post('/login', '\App\Controllers\AuthController@authenticate');
+$router->get('/logout', '\App\Controllers\AuthController@logout');
+
+// Rota do Dashboard (protegida)
+$router->get('/dashboard', '\App\Controllers\DashboardController@index');
 
 
 // --- Despacha a Requisição ---
