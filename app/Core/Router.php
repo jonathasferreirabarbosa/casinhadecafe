@@ -48,6 +48,8 @@ class Router {
         }
         $uri = $uri ?: '/';
 
+        die("DEBUG: Rota calculada: [" . $uri . "]"); // PONTO DE DEBUG
+
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === $method) {
                 // Rota encontrada, vamos processar o controller
