@@ -21,6 +21,10 @@ $router = new \App\Core\Router();
 // Rota para a página inicial.
 $router->get('/', '\App\Controllers\HomeController@index');
 
+// Rotas de Autenticação
+$router->get('/register', '\App\Controllers\AuthController@register');
+$router->post('/register', '\App\Controllers\AuthController@store');
+
 // Outras rotas (ex: /login, /produtos, /admin/dashboard) serão adicionadas aqui.
 
 
