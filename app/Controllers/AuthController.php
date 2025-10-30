@@ -116,6 +116,7 @@ class AuthController extends \App\Core\Controller {
             unset($_SESSION['old_input']);
             $_SESSION['user_id'] = $usuario['id'];
             $_SESSION['user_name'] = $usuario['nome'];
+            $_SESSION['user_type'] = $usuario['tipo_usuario'];
 
             // Redireciona para o dashboard
             header('Location: /dashboard');

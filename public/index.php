@@ -33,6 +33,63 @@ $router->get('/logout', '\App\Controllers\AuthController@logout');
 // Rota do Dashboard (protegida)
 $router->get('/dashboard', '\App\Controllers\DashboardController@index');
 
+// Rota de Produtos (Admin)
+$router->get('/admin/produtos', '\App\Controllers\Admin\ProdutoController@index');
+$router->get('/admin/produtos/criar', '\App\Controllers\Admin\ProdutoController@create');
+$router->post('/admin/produtos/salvar', '\App\Controllers\Admin\ProdutoController@store');
+$router->get('/admin/produtos/editar/{id}', '\App\Controllers\Admin\ProdutoController@edit');
+$router->post('/admin/produtos/atualizar/{id}', '\App\Controllers\Admin\ProdutoController@update');
+$router->get('/admin/produtos/deletar/{id}', '\App\Controllers\Admin\ProdutoController@delete');
+
+// Rotas de Fornadas (Admin)
+$router->get('/admin/fornadas', '\App\Controllers\Admin\FornadaController@index');
+$router->get('/admin/fornadas/criar', '\App\Controllers\Admin\FornadaController@create');
+$router->post('/admin/fornadas/salvar', '\App\Controllers\Admin\FornadaController@store');
+$router->get('/admin/fornadas/editar/{id}', '\App\Controllers\Admin\FornadaController@edit');
+$router->post('/admin/fornadas/atualizar/{id}', '\App\Controllers\Admin\FornadaController@update');
+$router->get('/admin/fornadas/deletar/{id}', '\App\Controllers\Admin\FornadaController@delete');
+$router->get('/admin/fornadas/itens/{fornadaId}', '\App\Controllers\Admin\FornadaController@getItensByFornadaId');
+
+// Rotas de Itens de Fornadas (Admin)
+$router->get('/admin/fornadas/{fornadaId}/itens', '\App\Controllers\Admin\FornadaController@manageItems');
+$router->post('/admin/fornadas/{fornadaId}/itens/salvar', '\App\Controllers\Admin\FornadaController@storeItem');
+$router->add('PUT', '/admin/fornadas/{fornadaId}/itens/atualizar/{itemId}', '\App\Controllers\Admin\FornadaController@updateItem');
+$router->get('/admin/fornadas/{fornadaId}/itens/deletar/{itemId}', '\App\Controllers\Admin\FornadaController@deleteItem');
+
+// Rotas de Usuários (Admin)
+$router->get('/admin/usuarios', '\App\Controllers\Admin\UsuarioController@index');
+$router->get('/admin/usuarios/criar', '\App\Controllers\Admin\UsuarioController@create');
+$router->post('/admin/usuarios/salvar', '\App\Controllers\Admin\UsuarioController@store');
+$router->get('/admin/usuarios/editar/{id}', '\App\Controllers\Admin\UsuarioController@edit');
+$router->post('/admin/usuarios/atualizar/{id}', '\App\Controllers\Admin\UsuarioController@update');
+$router->get('/admin/usuarios/deletar/{id}', '\App\Controllers\Admin\UsuarioController@delete');
+$router->get('/admin/usuarios/alterar-senha/{id}', '\App\Controllers\Admin\UsuarioController@changePassword');
+$router->post('/admin/usuarios/alterar-senha/{id}', '\App\Controllers\Admin\UsuarioController@changePassword');
+
+// Rotas de Pedidos (Admin)
+$router->get('/admin/pedidos', '\App\Controllers\Admin\PedidoController@index');
+$router->get('/admin/pedidos/ver/{id}', '\App\Controllers\Admin\PedidoController@ver');
+$router->get('/admin/pedidos/criar', '\App\Controllers\Admin\PedidoController@create');
+$router->post('/admin/pedidos/salvar', '\App\Controllers\Admin\PedidoController@store');
+
+// Rotas Públicas de Fornadas
+$router->get('/fornadas', '\App\Controllers\FornadaController@index');
+$router->get('/fornadas/ver/{id}', '\App\Controllers\FornadaController@show');
+
+// Rotas do Carrinho de Compras
+$router->post('/carrinho/adicionar', '\App\Controllers\CarrinhoController@adicionar');
+$router->get('/carrinho', '\App\Controllers\CarrinhoController@index');
+$router->get('/carrinho/remover/{id}', '\App\Controllers\CarrinhoController@remover');
+$router->post('/carrinho/atualizar', '\App\Controllers\CarrinhoController@atualizar');
+
+// Rotas de Checkout
+$router->get('/checkout', '\App\Controllers\CheckoutController@index');
+$router->post('/checkout/processar', '\App\Controllers\CheckoutController@processar');
+$router->get('/checkout/sucesso', '\App\Controllers\CheckoutController@sucesso');
+
+// Rota da Conta do Cliente
+$router->get('/conta', '\App\Controllers\ContaController@index');
+
 
 // --- Despacha a Requisição ---
 // O roteador encontra a rota correspondente à URL e executa o método do controller.

@@ -1,0 +1,465 @@
+/* --- Reset Básico & Fontes --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #F9F6F1; /* Bege Suave (Fundo/Base) */
+    color: #3E2723; /* Marrom Escuro (Texto) */
+    display: flex;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- Layout Principal (Sidebar + Conteúdo) --- */
+.sidebar {
+    width: 260px;
+    background-color: #3E2723; /* Marrom Escuro (Chocolate Amargo) */
+    color: #F9F6F1; /* Bege Suave (Texto na sidebar) */
+    padding: 2rem 1.5rem;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 2rem;
+}
+
+/* --- Componentes da Sidebar --- */
+.sidebar-title {
+    font-size: 1.75rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav li a {
+    display: flex; /* Changed from block */
+    align-items: center; /* Vertically align icon and text */
+    padding: 0.9rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-nav li a svg {
+    width: 1.5rem; /* 24px */
+    height: 1.5rem; /* 24px */
+    margin-right: 0.75rem; /* Space between icon and text */
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active { /* Classe para link ativo */
+    background-color: #A13333; /* Vermelho Amora (Destaque) */
+    color: #FFFFFF;
+}
+
+/* --- Componentes do Conteúdo Principal --- */
+.main-header {
+    border-bottom: 2px solid #E0E0E0;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.main-header h2 {
+    font-size: 2.5rem;
+    color: #6D4C41; /* Marrom Médio (Grão de Café) */
+}
+
+.content-body {
+    /* O conteúdo específico da página vai aqui */
+}
+
+/* --- Componentes Reutilizáveis (Cards, etc.) --- */
+.card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08);
+}
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #3E2723;
+}
+
+.card-content p {
+    line-height: 1.6;
+}
+
+/* --- Product Management Styles (from admin/produtos/index.php) --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem; /* Adicionado para espaçamento */
+}
+
+.button-primary {
+    background-color: #A13333; /* Vermelho Amora */
+    color: #F9F6F1; /* Bege Suave */
+    padding: 0.6rem 1.2rem;
+    border-radius: 99px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap; /* Evita quebra de linha */
+    height: 36px; /* Altura consistente */
+    display: inline-flex; /* Para alinhar conteúdo verticalmente */
+    align-items: center;
+    justify-content: center;
+    border: 0; /* Remove borda */
+    outline: none; /* Remove outline */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.button-primary:hover {
+    transform: scale(1.05);
+    background-color: #862b2b;
+    color: #F9F6F1; /* Garante que o texto permaneça branco no hover */
+    outline: none; /* Remove outline no hover */
+}
+.button-primary:focus {
+    outline: none; /* Remove outline no focus */
+}
+
+/* Estilo para o botão secundário */
+.button-secondary {
+    display: inline-flex; /* Para alinhar conteúdo verticalmente */
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #F9F6F1; /* Texto branco */
+    background-color: #6D4C41; /* Marrom Médio */
+    border: 0; /* Remove borda */
+    outline: none; /* Remove outline */
+    border-radius: 99px; /* Botão "pilled" */
+    cursor: pointer;
+    white-space: nowrap; /* Evita quebra de linha */
+    height: 36px; /* Altura consistente */
+    transition: background-color 0.3s, transform 0.2s;
+}
+.button-secondary:hover {
+    background-color: #5a3e37; /* Um tom mais escuro do marrom médio */
+    transform: translateY(-2px);
+    color: #F9F6F1; /* Garante que o texto permaneça branco no hover */
+    outline: none; /* Remove outline no hover */
+}
+.button-secondary:focus {
+    outline: none; /* Remove outline no focus */
+}
+
+/* Estilo para o botão de perigo (ex: Excluir) */
+.button-danger {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #F9F6F1; /* Texto branco */
+    background-color: #dc3545; /* Vermelho padrão para perigo */
+    border: 0; /* Remove borda */
+    outline: none; /* Remove outline */
+    border-radius: 99px;
+    cursor: pointer;
+    white-space: nowrap; /* Evita quebra de linha */
+    transition: background-color 0.3s, transform 0.2s;
+}
+.button-danger:hover {
+    background-color: #c82333; /* Um tom mais escuro */
+    transform: translateY(-2px);
+    color: #F9F6F1; /* Garante que o texto permaneça branco no hover */
+    outline: none; /* Remove outline no hover */
+}
+.button-danger:focus {
+    outline: none; /* Remove outline no focus */
+}
+
+/* Estilo para o botão do WhatsApp */
+.button-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #FFFFFF; /* Texto branco */
+    background-color: #25D366; /* Verde do WhatsApp */
+    border: 0;
+    outline: none;
+    border-radius: 99px;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 36px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.button-whatsapp:hover {
+    background-color: #1EAE54; /* Tom mais escuro do verde */
+    transform: translateY(-2px);
+    color: #FFFFFF;
+}
+.button-whatsapp svg {
+    margin-right: 0.5rem;
+}
+
+
+/* Estilo para o botão de upload de arquivo */
+.file-upload-button {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    margin-top: 10px;
+    cursor: pointer;
+    color: #F9F6F1 !important; /* Garante texto branco */
+    width: fit-content; /* Garante que não ocupe a largura máxima */
+    text-decoration: none; /* Remove sublinhado de links */
+    border-radius: 99px; /* Bordas arredondadas */
+    background-color: #A13333; /* Cor de destaque */
+    transition: background-color 0.3s, transform 0.2s;
+}
+.file-upload-button:hover {
+    background-color: #8a2b2b; /* Um tom mais escuro do vermelho amora */
+    transform: translateY(-2px);
+    color: #F9F6F1 !important; /* Garante que o texto permaneça branco no hover */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.table th, .table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.table thead th {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: #6D4C41; /* Marrom Médio */
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table .actions a {
+    /* Removed conflicting styling properties to allow button classes to take full effect */
+    margin-right: 0.5rem;
+}
+
+.table .actions input[type="number"] {
+    width: 80px; /* Largura específica para inputs pequenos na tabela */
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #D0D0D0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    text-align: center;
+    margin-right: 0.5rem;
+}
+
+/* --- Form Styles (from admin/produtos/form.php) --- */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #3E2723; /* Marrom Escuro */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #D0D0D0;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Garante que padding não aumente a largura total */
+    background-color: #FFFFFF; /* Garante fundo branco */
+    color: #3E2723; /* Garante texto escuro */
+    appearance: none; /* Remove seta padrão do select ou estilo nativo de number */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5em 1.5em;
+}
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233E2723'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #A13333; /* Vermelho Amora */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(161, 51, 51, 0.2);
+}
+
+/* Estilo para inputs inline em edicao */
+.form-control-inline {
+    width: 80px; /* Largura específica para inputs pequenos na tabela */
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #D0D0D0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #FFFFFF;
+    color: #3E2723;
+}
+
+.form-group textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+    width: 18px;
+    height: 18px;
+    accent-color: #A13333; /* Cor de destaque para o checkbox */
+}
+
+.checkbox-group label {
+    margin-bottom: 0; /* Remove margem inferior padrão para alinhar */
+}
+
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.alert-danger {
+    background-color: #ffe0e0;
+    color: #cc0000;
+    border: 1px solid #cc0000;
+}
+
+.alert-success {
+    background-color: #e0ffe0;
+    color: #008000;
+    border: 1px solid #008000;
+}
+
+.current-image-info {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #6D4C41;
+}
+
+/* --- Form Control Display Styles (for read-only text) --- */
+.form-control-display {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent; /* Transparente para parecer parte do layout */
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: transparent; /* Fundo transparente */
+    color: #3E2723; /* Cor do texto */
+    min-width: 80px; /* Para manter a largura mínima */
+}
+
+/* --- Datepicker Group Styles --- */
+.date-group-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+    gap: 20px; /* Espaçamento entre os grupos de data */
+    margin-bottom: 1rem;
+}
+
+.date-group-container .form-group {
+    flex: 1 1 calc(33% - 20px); /* 33% de largura para 3 itens, subtraindo o gap */
+    min-width: 280px; /* Largura mínima para evitar que fiquem muito pequenos */
+    margin-bottom: 0; /* Remove margem inferior padrão do form-group */
+}
+
+.date-group-container .form-group label {
+    margin-bottom: 0.5rem;
+}
+
+.date-group-container .form-group input[type="date"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #D0D0D0;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    appearance: none; /* Remove default browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #FFFFFF; /* Ensure background is white */
+    color: #3E2723; /* Ensure text color is dark */
+}
+
+.date-group-container .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(25%) sepia(15%) saturate(1000%) hue-rotate(330deg) brightness(90%) contrast(80%); /* Style the calendar icon */
+}
+
+/* --- Product Specific Styles --- */
+.current-product-image {
+    width: 100px; /* Define largura fixa */
+    height: 100px; /* Define altura fixa para ser quadrada */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 50%; /* Bordas arredondadas para fazer um círculo */
+}
+.current-image-info {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #6D4C41;
+}

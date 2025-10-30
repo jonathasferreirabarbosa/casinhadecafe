@@ -28,6 +28,6 @@ class DashboardController extends \App\Core\Controller
             'nome_usuario' => $_SESSION['user_name'] ?? 'Usuário'
         ];
 
-        $this->view('admin/dashboard', $data);
+        $this->view('admin/dashboard', $data, 'admin');
     }
 }

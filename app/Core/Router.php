@@ -7,14 +7,20 @@ class Router {
 
     /**
      * Adiciona uma nova rota ao roteador.
-     * 
+     *
      * @param string $method O método HTTP (GET, POST, etc.)
-     * @param string $uri A URI da rota (ex: /produtos)
+     * @param string $uri A URI da rota (ex: /produtos ou /produtos/{id})
      * @param string $controller O nome do Controller e método (ex: ProdutoController@index)
      */
     public function add($method, $uri, $controller) {
+        // Converte a URI para um padrão regex para capturar parâmetros dinâmicos
+        // Ex: /admin/produtos/{id} se torna #^/admin/produtos/([a-zA-Z0-9_]+)$#
+        $pattern = preg_replace('#/{([a-zA-Z0-9_]+)}#', '/([a-zA-Z0-9_]+)', $uri);
+        $pattern = '#^' . $pattern . '$#';
+
         $this->routes[] = [
-            'uri' => $uri,
+            'uri' => $uri, // URI original para referência
+            'pattern' => $pattern, // Padrão regex para correspondência
             'controller' => $controller,
             'method' => $method
         ];
@@ -41,6 +47,11 @@ class Router {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
 
+        // Handle _method for PUT/DELETE requests
+        if ($method === 'POST' && isset($_POST['_method'])) {
+            $method = strtoupper($_POST['_method']);
+        }
+
         // Remove a base path da URL, se aplicável (para rodar em subdiretório)
         $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME']);
         if (strpos($uri, $basePath) === 0) {
@@ -49,7 +60,12 @@ class Router {
         $uri = $uri ?: '/';
 
         foreach ($this->routes as $route) {
-            if ($route['uri'] === $uri && $route['method'] === $method) {
+            // Tenta fazer a correspondência com o padrão regex
+            if (preg_match($route['pattern'], $uri, $matches) && $route['method'] === $method) {
+                // Remove o primeiro elemento ($matches[0] é a string completa correspondida)
+                array_shift($matches);
+                $params = $matches; // Parâmetros capturados
+
                 // Rota encontrada, vamos processar o controller
                 $controllerParts = explode('@', $route['controller']);
                 $controllerName = $controllerParts[0];
@@ -59,13 +75,14 @@ class Router {
                 if (class_exists($controllerName)) {
                     $controller = new $controllerName();
                     if (method_exists($controller, $methodName)) {
-                        $controller->$methodName();
+                        // Chama o método do controller passando os parâmetros capturados
+                        call_user_func_array([$controller, $methodName], $params);
                         return;
                     }
                 }
-                
+
                 // Se a classe ou método não existir, cai para o 404.
-                break; 
+                break;
             }
         }
 
