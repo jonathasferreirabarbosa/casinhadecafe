@@ -42,6 +42,23 @@ class ItemFornada extends Model
     }
 
     /**
+     * Verifica se um produto já existe em uma fornada.
+     *
+     * @param int $fornadaId O ID da fornada.
+     * @param int $produtoId O ID do produto.
+     * @return bool
+     */
+    public function exists($fornadaId, $produtoId)
+    {
+        $sql = "SELECT COUNT(*) FROM Itens_Fornada WHERE fornada_id = :fornada_id AND produto_id = :produto_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':fornada_id', $fornadaId, PDO::PARAM_INT);
+        $stmt->bindParam(':produto_id', $produtoId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
+    }
+
+    /**
      * Cria um novo item de fornada.
      *
      * @param array $dados Dados do item (fornada_id, produto_id, preco_unitario, estoque_inicial, estoque_atual).
@@ -139,6 +156,22 @@ class ItemFornada extends Model
     public function reduzirEstoque($id, $quantidade)
     {
         $sql = "UPDATE Itens_Fornada SET estoque_atual = estoque_atual - :quantidade WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':quantidade', $quantidade, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    /**
+     * Aumenta o estoque de um item da fornada.
+     *
+     * @param int $id O ID do item da fornada.
+     * @param int $quantidade A quantidade a ser aumentada.
+     * @return bool
+     */
+    public function aumentarEstoque($id, $quantidade)
+    {
+        $sql = "UPDATE Itens_Fornada SET estoque_atual = estoque_atual + :quantidade WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':quantidade', $quantidade, PDO::PARAM_INT);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

@@ -18,13 +18,11 @@ class PedidoController extends Controller
             exit;
         }
 
-        // Carrega o model de Pedido (a ser criado)
         $pedidoModel = $this->model('Pedido');
         $pedidos = $pedidoModel->getAllPedidosComDetalhes();
 
         foreach ($pedidos as &$pedido) {
             $pedido['status_pagamento_texto'] = $pedidoModel->getStatusText($pedido['status_pagamento']);
-            $pedido['status_pedido_texto'] = $pedidoModel->getStatusText($pedido['status_pedido']);
         }
 
         $this->view('admin/pedidos/index', ['titulo' => 'Gerenciar Pedidos', 'pedidos' => $pedidos], 'admin');
@@ -36,20 +34,17 @@ class PedidoController extends Controller
      */
     public function ver($id)
     {
-        // Verifica se o usuário é admin
         if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
             $_SESSION['error_message'] = 'Você não tem permissão para acessar esta página.';
             header('Location: /login');
             exit;
         }
 
-        // Carrega o model de Pedido
         $pedidoModel = $this->model('Pedido');
         $pedido = $pedidoModel->getPedidoComItens($id);
 
         if ($pedido) {
             $pedido['status_pagamento_texto'] = $pedidoModel->getStatusText($pedido['status_pagamento']);
-            $pedido['status_pedido_texto'] = $pedidoModel->getStatusText($pedido['status_pedido']);
         }
 
         if (!$pedido) {
@@ -66,19 +61,16 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        // Verifica se o usuário é admin
         if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
             $_SESSION['error_message'] = 'Você não tem permissão para acessar esta página.';
             header('Location: /login');
             exit;
         }
 
-        // Carrega os models necessários
         $usuarioModel = $this->model('Usuario');
         $fornadaModel = $this->model('Fornada');
 
-        // Busca clientes e fornadas ativas
-        $clientes = $usuarioModel->getAll(); // Assumindo que este método busca todos os usuários
+        $clientes = $usuarioModel->getAll();
         $fornadas = $fornadaModel->getFornadasDisponiveisParaVenda();
 
         $this->view('admin/pedidos/form', [
@@ -96,10 +88,19 @@ class PedidoController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cliente_id = $_POST['cliente_id'] ?? null;
             $fornada_id = $_POST['fornada_id'] ?? null;
-            $itens_pedido = $_POST['itens_pedido'] ?? [];
+            $itens_pedido = array_filter($_POST['itens_pedido'] ?? [], function($item) {
+                return !empty($item['item_id']);
+            });
 
             if (!$cliente_id || !$fornada_id || empty($itens_pedido)) {
                 $_SESSION['error_message'] = 'Cliente, fornada e pelo menos um item são obrigatórios.';
+                header('Location: /admin/pedidos/criar');
+                exit;
+            }
+
+            $itemIds = array_column($itens_pedido, 'item_id');
+            if (count($itemIds) !== count(array_unique($itemIds))) {
+                $_SESSION['error_message'] = 'Não é permitido adicionar o mesmo item mais de uma vez no pedido.';
                 header('Location: /admin/pedidos/criar');
                 exit;
             }
@@ -136,5 +137,129 @@ class PedidoController extends Controller
                 exit;
             }
         }
+    }
+
+    /**
+     * Exibe o formulário para editar um pedido existente.
+     * @param int $id O ID do pedido.
+     */
+    public function edit($id)
+    {
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+            $_SESSION['error_message'] = 'Você não tem permissão para acessar esta página.';
+            header('Location: /login');
+            exit;
+        }
+
+        $pedidoModel = $this->model('Pedido');
+        $pedido = $pedidoModel->getPedidoComItens($id);
+
+        if (!$pedido) {
+            $_SESSION['error_message'] = 'Pedido não encontrado.';
+            header('Location: /admin/pedidos');
+            exit;
+        }
+
+        $usuarioModel = $this->model('Usuario');
+        $fornadaModel = $this->model('Fornada');
+        $itemFornadaModel = $this->model('ItemFornada');
+
+        $clientes = $usuarioModel->getAll();
+        $fornadas = $fornadaModel->getFornadasDisponiveisParaVenda();
+        $itensFornada = $itemFornadaModel->getByFornadaId($pedido['fornada_id']);
+
+        // Calcula o estoque disponível para edição
+        foreach ($itensFornada as &$itemFornada) {
+            $quantidadeNoPedidoAtual = 0;
+            foreach ($pedido['itens'] as $pedidoItem) {
+                if ($pedidoItem['item_fornada_id'] == $itemFornada['id']) {
+                    $quantidadeNoPedidoAtual = $pedidoItem['quantidade'];
+                    break;
+                }
+            }
+            $itemFornada['estoque_disponivel_para_edicao'] = $itemFornada['estoque_atual'] + $quantidadeNoPedidoAtual;
+        }
+
+        $this->view('admin/pedidos/edit', [
+            'titulo' => 'Editar Pedido',
+            'pedido' => $pedido,
+            'clientes' => $clientes,
+            'fornadas' => $fornadas,
+            'itensFornada' => $itensFornada
+        ], 'admin');
+    }
+
+    /**
+     * Atualiza um pedido existente no banco de dados.
+     * @param int $id O ID do pedido.
+     */
+    public function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $pedidoModel = $this->model('Pedido');
+            if ($pedidoModel->updatePedidoCompleto($id, $_POST)) {
+                $_SESSION['success_message'] = 'Pedido atualizado com sucesso!';
+            } else {
+                $_SESSION['error_message'] = 'Erro ao atualizar o pedido.';
+            }
+            header('Location: /admin/pedidos');
+            exit;
+        }
+    }
+
+    /**
+     * Confirma o pagamento de um pedido.
+     * @param int $id O ID do pedido.
+     */
+    public function confirmarPagamento($id)
+    {
+        $pedidoModel = $this->model('Pedido');
+        if ($pedidoModel->updateStatus($id, 'confirmado')) {
+            $_SESSION['success_message'] = 'Pagamento do pedido confirmado com sucesso!';
+        } else {
+            $_SESSION['error_message'] = 'Erro ao confirmar o pagamento do pedido.';
+        }
+        header('Location: /admin/pedidos');
+        exit;
+    }
+
+    /**
+     * Alterna o status de entrega de um pedido.
+     * @param int $id O ID do pedido.
+     */
+    public function toggleEntrega($id)
+    {
+        $pedidoModel = $this->model('Pedido');
+        $pedido = $pedidoModel->getPedidoComItens($id);
+
+        if ($pedido) {
+            $novoStatus = !$pedido['entregue'];
+            if ($pedidoModel->updateStatusEntrega($id, $novoStatus)) {
+                $_SESSION['success_message'] = 'Status de entrega atualizado com sucesso!';
+            } else {
+                $_SESSION['error_message'] = 'Erro ao atualizar o status de entrega.';
+            }
+        } else {
+            $_SESSION['error_message'] = 'Pedido não encontrado.';
+        }
+
+        header('Location: /admin/pedidos');
+        exit;
+    }
+
+    /**
+     * Deleta um pedido do banco de dados.
+     * @param int $id O ID do pedido.
+     */
+    public function delete($id)
+    {
+        $pedidoModel = $this->model('Pedido');
+        if ($pedidoModel->delete($id)) {
+            $_SESSION['success_message'] = 'Pedido deletado com sucesso!';
+        } else {
+            $_SESSION['error_message'] = 'Erro ao deletar o pedido.';
+        }
+        header('Location: /admin/pedidos');
+        exit;
     }
 }

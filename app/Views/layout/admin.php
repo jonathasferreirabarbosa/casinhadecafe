@@ -43,7 +43,7 @@
                 </li>
                 <!-- Ícone de Orçamentos (Calculadora) -->
                 <li>
-                    <a href="#">
+                    <a href="/admin/orcamentos">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3-6h.008v.008H11.25v-.008zm0 3h.008v.008H11.25v-.008zm0 3h.008v.008H11.25v-.008zm3-6h.008v.008H14.25v-.008zm0 3h.008v.008H14.25v-.008zm0 3h.008v.008H14.25v-.008zM6 18V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v12A2.25 2.25 0 0115.75 20.25h-7.5A2.25 2.25 0 016 18z" />
                         </svg>

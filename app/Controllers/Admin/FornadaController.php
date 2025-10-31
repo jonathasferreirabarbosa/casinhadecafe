@@ -147,6 +147,13 @@ class FornadaController extends Controller
             return;
         }
 
+        // Verifica se o item já existe na fornada
+        if ($this->itemFornadaModel->exists($fornadaId, $dados['produto_id'])) {
+            $_SESSION['error_message'] = 'Este produto já foi adicionado a esta fornada.';
+            $this->redirect('/admin/fornadas/' . $fornadaId . '/itens');
+            return;
+        }
+
         if ($this->itemFornadaModel->create($dados)) {
             $_SESSION['success_message'] = 'Item da fornada adicionado com sucesso!';
             $this->redirect('/admin/fornadas/' . $fornadaId . '/itens');

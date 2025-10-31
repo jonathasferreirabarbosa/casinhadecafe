@@ -1,0 +1,1 @@
+ALTER TABLE Pedidos MODIFY COLUMN status_pagamento ENUM('pendente', 'confirmado', 'pago_total', 'expirado', 'pendente_50', 'confirmado_50') NOT NULL DEFAULT 'pendente';

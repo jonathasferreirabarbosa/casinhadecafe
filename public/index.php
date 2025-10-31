@@ -71,6 +71,20 @@ $router->get('/admin/pedidos', '\App\Controllers\Admin\PedidoController@index');
 $router->get('/admin/pedidos/ver/{id}', '\App\Controllers\Admin\PedidoController@ver');
 $router->get('/admin/pedidos/criar', '\App\Controllers\Admin\PedidoController@create');
 $router->post('/admin/pedidos/salvar', '\App\Controllers\Admin\PedidoController@store');
+$router->get('/admin/pedidos/editar/{id}', '\App\Controllers\Admin\PedidoController@edit');
+$router->post('/admin/pedidos/atualizar/{id}', '\App\Controllers\Admin\PedidoController@update');
+$router->get('/admin/pedidos/deletar/{id}', '\App\Controllers\Admin\PedidoController@delete');
+$router->get('/admin/pedidos/confirmar_pagamento/{id}', '\App\Controllers\Admin\PedidoController@confirmarPagamento');
+$router->get('/admin/pedidos/toggle_entrega/{id}', '\App\Controllers\Admin\PedidoController@toggleEntrega');
+
+// Rotas de Orçamentos (Admin)
+$router->get('/admin/orcamentos', '\App\Controllers\Admin\OrcamentoController@index');
+$router->get('/admin/orcamentos/create', '\App\Controllers\Admin\OrcamentoController@create');
+$router->post('/admin/orcamentos/store', '\App\Controllers\Admin\OrcamentoController@store');
+$router->get('/admin/orcamentos/show/{id}', '\App\Controllers\Admin\OrcamentoController@show');
+$router->get('/admin/orcamentos/edit/{id}', '\App\Controllers\Admin\OrcamentoController@edit');
+$router->post('/admin/orcamentos/update/{id}', '\App\Controllers\Admin\OrcamentoController@update');
+$router->post('/admin/orcamentos/delete/{id}', '\App\Controllers\Admin\OrcamentoController@delete');
 
 // Rotas Públicas de Fornadas
 $router->get('/fornadas', '\App\Controllers\FornadaController@index');

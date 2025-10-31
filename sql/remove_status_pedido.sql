@@ -1,0 +1,1 @@
+ALTER TABLE Pedidos DROP COLUMN status_pedido;

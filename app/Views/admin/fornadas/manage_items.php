@@ -23,13 +23,17 @@
                 Nenhum produto cadastrado. Por favor, <a href="/admin/produtos" class="button-primary">adicione produtos</a> antes de gerenciar os itens da fornada.
             </div>
         <?php else: ?>
-        <form action="/admin/fornadas/<?php echo $fornada['id']; ?>/itens/salvar" method="POST" class="form-inline">
+        <form action="/admin/fornadas/<?php echo $fornada['id']; ?>/itens/salvar" method="POST" class="form-inline" onsubmit="return validateForm();">
             <div class="form-group">
                 <label for="produto_id">Produto:</label>
                 <select id="produto_id" name="produto_id" required>
                     <option value="">Selecione um produto</option>
-                    <?php foreach ($produtosDisponiveis as $produto): ?>
-                        <option value="<?php echo $produto['id']; ?>"><?php echo htmlspecialchars($produto['nome'] . ' (' . $produto['tipo_unidade'] . ')'); ?></option>
+                    <?php
+                    $produtosAdicionadosIds = array_column($fornadaItems, 'produto_id');
+                    foreach ($produtosDisponiveis as $produto):
+                        $disabled = in_array($produto['id'], $produtosAdicionadosIds) ? 'disabled' : '';
+                    ?>
+                        <option value="<?php echo $produto['id']; ?>" <?php echo $disabled; ?>><?php echo htmlspecialchars($produto['nome'] . ' (' . $produto['tipo_unidade'] . ')'); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -124,6 +128,17 @@
 </style>
 
 <script>
+const produtosAdicionadosIds = <?php echo json_encode(array_column($fornadaItems, 'produto_id')); ?>;
+
+function validateForm() {
+    const selectedProductId = document.getElementById('produto_id').value;
+    if (produtosAdicionadosIds.includes(selectedProductId)) {
+        alert('Este produto já foi adicionado a esta fornada.');
+        return false; // Prevent form submission
+    }
+    return true; // Allow form submission
+}
+
 function prepareItemUpdate(itemId) {
     const precoUnitarioEdit = document.querySelector(`#preco_unitario_cell_${itemId} .edit-mode`);
     const estoqueInicialEdit = document.querySelector(`#estoque_inicial_cell_${itemId} .edit-mode`);
